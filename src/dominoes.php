@@ -35,6 +35,7 @@ foreach ($players as $player) {
     $player->drawTile($gamePile, 7);
 }
 
+$staleMateCounter = 0;
 while (true) {
     $player = array_shift($players);
     while (false === $player->makeMove($board)) {
@@ -46,6 +47,10 @@ while (true) {
         if (false !== $player->drawTile($gamePile)) {
             echo "{$player->getName()} can't play, drawing tile {$player->getLastDrawnTile()->getLabel()}\n";
         } else {
+            if ($staleMateCounter++ >= 2) {
+                echo "No player can make a move, stalemate\n";
+                exit();
+            }
             break;
         }
     }
