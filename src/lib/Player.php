@@ -30,7 +30,7 @@ class Player
      */
     public function countTiles() : int
     {
-        return count($this->tiles);
+        return \count($this->tiles);
     }
 
     /**
@@ -70,7 +70,7 @@ class Player
             if ($board->attachBegin($tile) || $board->attachEnd($tile)) {
                 $this->tiles->removeTile($tile);
 
-                $connectedTile = end(array_filter([$tile->getAttached(Tile::BEGIN), $tile->getAttached(Tile::END)]));
+                $connectedTile = $tile->getAttached(Tile::BEGIN) ?:  $tile->getAttached(Tile::END);
                 echo "{$this->name} Plays {$tile->getLabel()} to connect to tile {$connectedTile->getLabel()} on the board\n";
                 echo "Board is now: {$board->getSequenceAsString()}\n";
 

@@ -5,8 +5,8 @@ namespace Acme\lib;
 
 class Tile
 {
-    const BEGIN = 0;
-    const END = 1;
+    public const BEGIN = 0;
+    public const END = 1;
 
     /**
      * @var int[]
@@ -42,7 +42,7 @@ class Tile
      */
     public function getLabel($noReverse = false): string
     {
-        $reverse = ($noReverse) ? false : $this->reverse;
+        $reverse = $noReverse ? false : $this->reverse;
         return sprintf('<%s>', implode(':', $reverse ? array_reverse($this->spots) : $this->spots));
     }
 
@@ -54,7 +54,7 @@ class Tile
     public function attach(int $side, Tile $tile): void
     {
         if ($this->isReversed()) {
-            $side = $side ? Tile::BEGIN : Tile::END;
+            $side = $side ? self::BEGIN : self::END;
         }
         $this->attachedTile[$side] = $tile;
     }
@@ -65,7 +65,7 @@ class Tile
      */
     public function hasNumber(int $numberA): bool
     {
-        return in_array($numberA, $this->spots, true);
+        return \in_array($numberA, $this->spots, true);
     }
 
     /**
@@ -76,7 +76,7 @@ class Tile
     public function canAttach(int $side, Tile $tile): bool
     {
         if ($this->isReversed()) {
-            $side = $side ? Tile::BEGIN : Tile::END;
+            $side = $side ? self::BEGIN : self::END;
         }
 
         return

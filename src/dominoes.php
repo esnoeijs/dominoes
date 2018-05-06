@@ -7,7 +7,7 @@ use Acme\lib\Tile;
 use Acme\lib\TileSequence;
 use Acme\lib\TileSetFactory;
 
-require(__DIR__ . '/../vendor/autoload.php');
+require __DIR__ . '/../vendor/autoload.php';
 
 
 new Tile(0,1);
@@ -46,5 +46,5 @@ while (true) {
         }
     }
 
-    array_push($players, $player);
+    $players[] = $player;
 }

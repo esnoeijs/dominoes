@@ -102,7 +102,7 @@ class TileSequence
                 $tile->attach($side === Tile::END ? Tile::BEGIN : Tile::END, $this->end);
 
                 $this->end = $tile;
-                array_push($this->items, $tile);
+                $this->items[] = $tile;
 
                 return true;
             }

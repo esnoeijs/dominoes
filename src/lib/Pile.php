@@ -9,7 +9,7 @@ class Pile implements \Countable
     /**
      * @var Tile[]
      */
-    private $tiles = [];
+    private $tiles;
 
     /**
      * Pile constructor.
@@ -33,7 +33,7 @@ class Pile implements \Countable
      */
     public function count() : int
     {
-       return count($this->tiles);
+       return \count($this->tiles);
     }
 
     /**
