@@ -19,9 +19,9 @@ class PileTest extends TestCase
         $pile = new Pile($tiles);
 
         for ($i = 0; $i < count($tiles); $i++) {
-            $this->assertNotNull($pile->getPiece(), 'Should return a tile piece');
+            $this->assertNotNull($pile->getTile(), 'Should return a tile piece');
         }
-        $this->assertNull($pile->getPiece(), 'There should be no more pieces');
+        $this->assertNull($pile->getTile(), 'There should be no more pieces');
     }
 
 }

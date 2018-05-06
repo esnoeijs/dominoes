@@ -66,6 +66,10 @@ class TileSequence
         return false;
     }
 
+    /**
+     * @param Tile $tile
+     * @return bool
+     */
     public function attachEnd(Tile $tile) : bool
     {
         foreach ([Tile::BEGIN, Tile::END] as $side) {
@@ -73,6 +77,24 @@ class TileSequence
                 $tile->attach($side, $this->end);
                 $this->end = $tile;
                 array_push($this->items, $tile);
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Tile $tile
+     * @return bool
+     */
+    public function canConnect(Tile $tile) : bool
+    {
+        foreach ([Tile::BEGIN, Tile::END] as $side) {
+            /** @var Tile $sequenceTile */
+            foreach ([$this->begin, $this->end] as $sequenceTile) {
+                if ($sequenceTile->canAttach($side, $tile)) {
+                    return true;
+                }
             }
         }
 

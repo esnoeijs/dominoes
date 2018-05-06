@@ -43,5 +43,19 @@ class TileSequenceTest extends TestCase
         $this->assertEquals('<2:4> <4:1> <1:0> <0:0> <0:2>', $seq->getSequenceAsString());
         $this->assertSame($tiles['0:2'], $seq->getEnd());
     }
+
+    public function testCanConnect()
+    {
+        $seq = new TileSequence();
+        $seq->addFirstPiece(new Tile(0,3));
+        $seq->attachEnd(new Tile(3,4));
+
+
+        $this->assertTrue($seq->canConnect(new Tile(0,1)), '0:1 should be able to connect To the sequence BEGIN');
+        $this->assertFalse($seq->canConnect(new Tile(1,2)), "1:2 should not be able to connect with 0:0");
+        $this->assertTrue($seq->canConnect(new Tile(1,4)), '1:4 should be able to connect to the sequence END');
+
+
+    }
 }
 

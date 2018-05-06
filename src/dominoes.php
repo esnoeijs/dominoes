@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use Acme\lib\Pile;
+use Acme\lib\Player;
 use Acme\lib\Tile;
 use Acme\lib\TileSequence;
 use Acme\lib\TileSetFactory;
@@ -19,4 +20,26 @@ $gamePile = new Pile($tiles);
 
 $board = new TileSequence();
 
-$board->addFirstPiece($gamePile->getPiece());
+$board->addFirstPiece($gamePile->getTile());
+
+echo sprintf("Game starting with first tile: {$board->getBegin()->getLabel()}\n");
+
+/** @var Player[] $players */
+$players = [
+    new Player('Alice'),
+    new Player('Bob')
+];
+
+foreach ($players as $player) {
+    $player->drawTile($gamePile, 7);
+}
+
+foreach ($players as $player) {
+    while (true) {
+        if ($player->hasMove($board)) {
+            $player->makeMove($board);
+        } else {
+            $player->drawTile($gamePile);
+        }
+    }
+}
