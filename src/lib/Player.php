@@ -16,6 +16,11 @@ class Player
     private $tiles;
 
     /**
+     * @var Tile
+     */
+    private $lastDrawnTile;
+
+    /**
      * Player constructor.
      * @param string $name
      */
@@ -54,10 +59,19 @@ class Player
                 return false;
             }
 
+            $this->lastDrawnTile = $tile;
             $this->tiles->addTile($tile);
         }
 
         return true;
+    }
+
+    /**
+     * @return Tile
+     */
+    public function getLastDrawnTile() : Tile
+    {
+        return $this->lastDrawnTile;
     }
 
     /**

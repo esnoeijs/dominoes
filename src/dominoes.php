@@ -9,17 +9,16 @@ use Acme\lib\TileSetFactory;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-
-new Tile(0,1);
-
 $tileSetFactory = new TileSetFactory();
 
-$shuffleTiles = $tiles = $tileSetFactory->getTileSet();
+$shuffleTiles = $tileSetFactory->getTileSet();
 shuffle($shuffleTiles);
-array_multisort($shuffleTiles, $tiles);
+$tiles = [];
+foreach ($shuffleTiles as $tile) {
+    $tiles[$tile->getLabel()] = $tile;
+}
 
 $gamePile = new Pile($tiles);
-
 $board = new TileSequence();
 
 $board->addFirstPiece($gamePile->getTile());
@@ -39,10 +38,15 @@ foreach ($players as $player) {
 while (true) {
     $player = array_shift($players);
     while (false === $player->makeMove($board)) {
-        echo "{$player->getName()} draw\n";
-        if (false === $player->drawTile($gamePile))  {
-            echo $player->getName() . " lost\n";
+        if ($player->countTiles() === 0) {
+            echo $player->getName() . " has won\n";
             exit();
+        }
+
+        if (false !== $player->drawTile($gamePile)) {
+            echo "{$player->getName()} can't play, drawing tile {$player->getLastDrawnTile()->getLabel()}\n";
+        } else {
+            break;
         }
     }
 
