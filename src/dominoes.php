@@ -40,7 +40,7 @@ while (true) {
     $player = array_shift($players);
     while (false === $player->makeMove($board)) {
         if ($player->countTiles() === 0) {
-            echo $player->getName() . " has won\n";
+            echo "Player {$player->getName()} has won!\n";
             exit();
         }
 
