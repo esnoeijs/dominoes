@@ -49,7 +49,7 @@ class Tile
     /**
      * @param int $side
      * @param Tile $tile
-     * @return bool
+     * @return void
      */
     public function attach(int $side, Tile $tile): void
     {

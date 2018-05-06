@@ -18,7 +18,7 @@ class TileSequence
     /**
      * @param Tile $tile
      */
-    public function addFirstPiece(Tile $tile)
+    public function addFirstPiece(Tile $tile) : void
     {
         $this->items[] = $this->begin = $this->end = $tile;
     }

@@ -46,7 +46,7 @@ class Player
      * @param int $amount
      * @return bool
      */
-    public function drawTile(Pile $gamePile, int $amount = 1)
+    public function drawTile(Pile $gamePile, int $amount = 1) : bool
     {
         while ($amount-- > 0) {
             $tile = $gamePile->getTile();
