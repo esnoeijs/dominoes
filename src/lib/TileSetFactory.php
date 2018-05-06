@@ -10,7 +10,7 @@ class TileSetFactory
      *
      * @return Tile[]
      */
-    public function getTileSet()
+    public function getTileSet() : array
     {
         $tileSet = [];
         for ($numberA = 0; $numberA <= 6; $numberA++) {
