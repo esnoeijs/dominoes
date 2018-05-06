@@ -56,10 +56,24 @@ class TileSequence
     public function attachBegin(Tile $tile) : bool
     {
         foreach ([Tile::BEGIN, Tile::END] as $side) {
-            if ($tile->canAttach($side, $this->begin)) {
-                $tile->attach($side, $this->begin);
+            if ($this->begin->canAttach($side, $tile)) {
+                if ($this->begin->isReversed()) {
+                    if ($tile->getSpots(Tile::END) !== $this->begin->getSpots(Tile::END)) {
+                        $tile->setReverse();
+                    }
+                } else {
+                    if ($tile->getSpots(Tile::END) !== $this->begin->getSpots(Tile::BEGIN)) {
+                        $tile->setReverse();
+                    }
+                }
+
+                $this->begin->attach($side, $tile);
+                $tile->attach($side === Tile::END ? Tile::BEGIN : Tile::END, $this->begin);
+
                 $this->begin = $tile;
                 array_unshift($this->items, $tile);
+
+                return true;
             }
         }
 
@@ -73,10 +87,24 @@ class TileSequence
     public function attachEnd(Tile $tile) : bool
     {
         foreach ([Tile::BEGIN, Tile::END] as $side) {
-            if ($tile->canAttach($side, $this->end)) {
-                $tile->attach($side, $this->end);
+            if ($this->end->canAttach($side, $tile)) {
+                if ($this->end->isReversed()) {
+                    if ($tile->getSpots(Tile::BEGIN) !== $this->end->getSpots(Tile::BEGIN)) {
+                        $tile->setReverse();
+                    }
+                } else {
+                    if ($tile->getSpots(Tile::BEGIN) !== $this->end->getSpots(Tile::END)) {
+                        $tile->setReverse();
+                    }
+                }
+
+                $this->end->attach($side, $tile);
+                $tile->attach($side === Tile::END ? Tile::BEGIN : Tile::END, $this->end);
+
                 $this->end = $tile;
                 array_push($this->items, $tile);
+
+                return true;
             }
         }
 
@@ -90,11 +118,8 @@ class TileSequence
     public function canConnect(Tile $tile) : bool
     {
         foreach ([Tile::BEGIN, Tile::END] as $side) {
-            /** @var Tile $sequenceTile */
-            foreach ([$this->begin, $this->end] as $sequenceTile) {
-                if ($sequenceTile->canAttach($side, $tile)) {
-                    return true;
-                }
+            if ($this->begin->canAttach($side, $tile) || $this->end->canAttach($side, $tile)) {
+                return true;
             }
         }
 

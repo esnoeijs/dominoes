@@ -27,21 +27,25 @@ class TileSequenceTest extends TestCase
         $this->assertSame($tiles['0:0'], $seq->getEnd());
         $this->assertEquals('<0:0>', $seq->getSequenceAsString());
 
-        $seq->attachBegin($tiles['0:1']);
+        $this->assertTrue($seq->attachBegin($tiles['0:1']));
         $this->assertEquals('<1:0> <0:0>', $seq->getSequenceAsString());
 
-        $seq->attachBegin($tiles['1:4']);
+        $this->assertTrue($seq->attachBegin($tiles['1:4']));
         $this->assertEquals('<4:1> <1:0> <0:0>', $seq->getSequenceAsString());
 
-        $seq->attachBegin($tiles['2:4']);
+        $this->assertTrue($seq->attachBegin($tiles['2:4']));
         $this->assertEquals('<2:4> <4:1> <1:0> <0:0>', $seq->getSequenceAsString());
 
         $this->assertSame($tiles['2:4'], $seq->getBegin());
         $this->assertSame($tiles['0:0'], $seq->getEnd());
 
-        $seq->attachEnd($tiles['0:2']);
+        $this->assertTrue($seq->attachEnd($tiles['0:2']), '0:2 should attach to 0:0');
         $this->assertEquals('<2:4> <4:1> <1:0> <0:0> <0:2>', $seq->getSequenceAsString());
         $this->assertSame($tiles['0:2'], $seq->getEnd());
+
+        $this->assertTrue($seq->attachEnd(new Tile(1,2)));
+        $this->assertTrue($seq->attachEnd(new Tile(2,1)));
+
     }
 
     public function testCanConnect()
@@ -50,12 +54,11 @@ class TileSequenceTest extends TestCase
         $seq->addFirstPiece(new Tile(0,3));
         $seq->attachEnd(new Tile(3,4));
 
-
         $this->assertTrue($seq->canConnect(new Tile(0,1)), '0:1 should be able to connect To the sequence BEGIN');
         $this->assertFalse($seq->canConnect(new Tile(1,2)), "1:2 should not be able to connect with 0:0");
         $this->assertTrue($seq->canConnect(new Tile(1,4)), '1:4 should be able to connect to the sequence END');
 
-
+        $seq->attachBegin(new Tile(0,1));
+        $this->assertFalse($seq->canConnect(new Tile(0,2)));
     }
 }
-

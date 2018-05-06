@@ -14,8 +14,10 @@ new Tile(0,1);
 
 $tileSetFactory = new TileSetFactory();
 
-$tiles = $tileSetFactory->getTileSet();
-shuffle($tiles);
+$shuffleTiles = $tiles = $tileSetFactory->getTileSet();
+shuffle($shuffleTiles);
+array_multisort($shuffleTiles, $tiles);
+
 $gamePile = new Pile($tiles);
 
 $board = new TileSequence();
@@ -34,12 +36,15 @@ foreach ($players as $player) {
     $player->drawTile($gamePile, 7);
 }
 
-foreach ($players as $player) {
-    while (true) {
-        if ($player->hasMove($board)) {
-            $player->makeMove($board);
-        } else {
-            $player->drawTile($gamePile);
+while (true) {
+    $player = array_shift($players);
+    while (false === $player->makeMove($board)) {
+        echo "{$player->getName()} draw\n";
+        if (false === $player->drawTile($gamePile))  {
+            echo $player->getName() . " lost\n";
+            exit();
         }
     }
+
+    array_push($players, $player);
 }

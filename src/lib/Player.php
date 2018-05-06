@@ -26,6 +26,22 @@ class Player
     }
 
     /**
+     * @return int
+     */
+    public function countTiles() : int
+    {
+        return count($this->tiles);
+    }
+
+    /**
+     * @return string
+     */
+    public function getName() : string
+    {
+        return $this->name;
+    }
+
+    /**
      * @param Pile $gamePile
      * @param int $amount
      * @return bool
@@ -48,10 +64,16 @@ class Player
      * @param TileSequence $board
      * @return bool
      */
-    public function hasMove(TileSequence $board) : bool
+    public function makeMove(TileSequence $board) : bool
     {
         foreach ($this->tiles->getTiles() as $tile) {
-            if ($board->canConnect($tile)) {
+            if ($board->attachBegin($tile) || $board->attachEnd($tile)) {
+                $this->tiles->removeTile($tile);
+
+                $connectedTile = end(array_filter([$tile->getAttached(Tile::BEGIN), $tile->getAttached(Tile::END)]));
+                echo "{$this->name} Plays {$tile->getLabel()} to connect to tile {$connectedTile->getLabel()} on the board\n";
+                echo "Board is now: {$board->getSequenceAsString()}\n";
+
                 return true;
             }
         }

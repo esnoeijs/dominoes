@@ -51,4 +51,12 @@ class Pile implements \Countable
     {
         return $this->tiles;
     }
+
+    /**
+     * @param Tile $tile
+     */
+    public function removeTile(Tile $tile) : void
+    {
+         unset($this->tiles[$tile->getLabel(true)]);
+    }
 }

@@ -15,7 +15,7 @@ class Tile
     /**
      * @var Tile[]
      */
-    private $attachedTile;
+    private $attachedTile = [];
     /**
      * @var bool
      */
@@ -37,11 +37,13 @@ class Tile
     }
 
     /**
+     * @param bool $noReverse if set to true the numbers will be printed in original sequence
      * @return string
      */
-    public function getLabel() : string
+    public function getLabel($noReverse = false): string
     {
-        return sprintf('<%s>', implode(':', $this->reverse ? array_reverse($this->spots) : $this->spots));
+        $reverse = ($noReverse) ? false : $this->reverse;
+        return sprintf('<%s>', implode(':', $reverse ? array_reverse($this->spots) : $this->spots));
     }
 
     /**
@@ -49,29 +51,19 @@ class Tile
      * @param Tile $tile
      * @return bool
      */
-    public function attach(int $side, Tile $tile) : bool
+    public function attach(int $side, Tile $tile): void
     {
-        if ($this->canAttach($side, $tile)) {
-            if ($tile->getSpots($side) !== $this->getSpots($side)) {
-                $tile->setReverse();
-            }
-
-            echo "attached " . $this->getLabel() . " to " . $tile->getLabel(). "\n";
-
-            $this->attachedTile[$side] = $tile;
-            $tile->attach($side === self::END ? self::BEGIN : self::END, $this);
-
-            return true;
+        if ($this->isReversed()) {
+            $side = $side ? Tile::BEGIN : Tile::END;
         }
-
-        return false;
+        $this->attachedTile[$side] = $tile;
     }
 
     /**
      * @param int $numberA
      * @return bool
      */
-    public function hasNumber(int $numberA) : bool
+    public function hasNumber(int $numberA): bool
     {
         return in_array($numberA, $this->spots, true);
     }
@@ -81,16 +73,23 @@ class Tile
      * @param Tile $tile
      * @return bool
      */
-    public function canAttach(int $side, Tile $tile) : bool
+    public function canAttach(int $side, Tile $tile): bool
     {
-        return $tile->hasNumber($this->spots[$side]) && $this->attachedTile[$side] === null && $tile !== $this;
+        if ($this->isReversed()) {
+            $side = $side ? Tile::BEGIN : Tile::END;
+        }
+
+        return
+            $tile->hasNumber($this->spots[$side])
+            && false === isset($this->attachedTile[$side])
+            && $tile !== $this;
     }
 
     /**
      * @param int $side
      * @return Tile|null
      */
-    public function getAttached(int $side) : ?Tile
+    public function getAttached(int $side): ?Tile
     {
         return $this->attachedTile[$side];
     }
@@ -98,16 +97,24 @@ class Tile
     /**
      * Sets the tile to be displayed in reverse
      */
-    public function setReverse()
+    public function setReverse(): void
     {
         $this->reverse = true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReversed(): bool
+    {
+        return $this->reverse;
     }
 
     /**
      * @param int $side
      * @return int
      */
-    public function getSpots(int $side) : int
+    public function getSpots(int $side): int
     {
         return $this->spots[$side];
     }
